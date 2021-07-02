@@ -29,15 +29,15 @@ class TopModalSheet<T> extends StatefulWidget {
 
 class TopModalSheetState<T> extends State<TopModalSheet<T>>
     with SingleTickerProviderStateMixin {
-  final GlobalKey _childKey = GlobalKey();
+  // final GlobalKey _childKey = GlobalKey();
   Animation<double> _animation;
   AnimationController _animationController;
   bool _isPoping = false;
 
-  double get _childHeight {
-    final RenderBox renderBox = _childKey.currentContext.findRenderObject();
-    return renderBox.size.height;
-  }
+  // double get _childHeight {
+  //   final RenderBox renderBox = _childKey.currentContext.findRenderObject();
+  //   return renderBox.size.height;
+  // }
 
   bool get _dismissUnderway =>
       _animationController.status == AnimationStatus.reverse;
@@ -62,32 +62,32 @@ class TopModalSheetState<T> extends State<TopModalSheet<T>>
     // _animationController.forward();
   }
 
-  void _handleDragUpdate(DragUpdateDetails details) {
-    if (_dismissUnderway) return;
+  // void _handleDragUpdate(DragUpdateDetails details) {
+  //   if (_dismissUnderway) return;
 
-    var change = details.primaryDelta / (_childHeight ?? details.primaryDelta);
-    _animationController.value += change;
-  }
+  //   var change = details.primaryDelta / (_childHeight ?? details.primaryDelta);
+  //   _animationController.value += change;
+  // }
 
-  void _handleDragEnd(DragEndDetails details) {
-    if (_dismissUnderway) return;
+  // void _handleDragEnd(DragEndDetails details) {
+  //   if (_dismissUnderway) return;
 
-    if (details.velocity.pixelsPerSecond.dy > 0) return;
+  //   if (details.velocity.pixelsPerSecond.dy > 0) return;
 
-    if (details.velocity.pixelsPerSecond.dy > 700) {
-      final double flingVelocity =
-          -details.velocity.pixelsPerSecond.dy / _childHeight;
-      if (_animationController.value > 0.0)
-        _animationController.fling(velocity: flingVelocity);
-    } else if (_animationController.value < 0.5) {
-      if (_animationController.value > 0.0)
-        _animationController.fling(velocity: -1.0);
-    } else {
-      _animationController.reverse();
-      widget.backgroundColor = Colors.transparent;
-      setState(() {});
-    }
-  }
+  //   if (details.velocity.pixelsPerSecond.dy > 700) {
+  //     final double flingVelocity =
+  //         -details.velocity.pixelsPerSecond.dy / _childHeight;
+  //     if (_animationController.value > 0.0)
+  //       _animationController.fling(velocity: flingVelocity);
+  //   } else if (_animationController.value < 0.5) {
+  //     if (_animationController.value > 0.0)
+  //       _animationController.fling(velocity: -1.0);
+  //   } else {
+  //     _animationController.reverse();
+  //     widget.backgroundColor = Colors.transparent;
+  //     setState(() {});
+  //   }
+  // }
 
   Future<bool> onBackPressed({dynamic data}) async {
     // _animationController.reverse();
@@ -106,61 +106,29 @@ class TopModalSheetState<T> extends State<TopModalSheet<T>>
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
 
-    return WillPopScope(
-      onWillPop: onBackPressed,
-      child: SafeArea(
-        child: Scaffold(
-            backgroundColor: widget.backgroundColor,
-            body: Stack(
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  child: Container(
-                    width: screenSize.width,
-                    height: screenSize.height,
-                    color: Colors.transparent,
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                SingleChildScrollView(
-                    child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  child: widget.child,
-                )),
-              ],
-            )
-
-            // Column(
-            //   key: _childKey,
-            //   children: <Widget>[
-            //     Expanded(
-            //       flex: 1,
-            //       child: Container(
-            //         width: MediaQuery.of(context).size.width,
-            //         child: GestureDetector(
-            //           behavior: HitTestBehavior.opaque,
-            //           child: widget.child,
-            //           onTap: () {},
-            //         ),
-            //       ),
-            //     ),
-            //     Expanded(
-            //       flex: 3,
-            //       child: GestureDetector(
-            //         behavior: HitTestBehavior.opaque,
-            //         child: Container(
-            //           color: Colors.transparent,
-            //         ),
-            //         onTap: () {
-            //           Navigator.of(context).pop();
-            //         },
-            //       ),
-            //     ),
-            //   ],
-            // ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: widget.backgroundColor,
+        body: Stack(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                width: screenSize.width,
+                height: screenSize.height,
+                color: Colors.transparent,
+              ),
+              onTap: () {
+                Navigator.of(context).pop();
+              },
             ),
+            SingleChildScrollView(
+                child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: widget.child,
+            )),
+          ],
+        ),
       ),
     );
   }
